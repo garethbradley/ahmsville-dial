@@ -60,7 +60,7 @@ class _SerialListState extends State<SerialList> {
               Builder(builder: (context) {
                 final port = SerialPort(address);
                 try {
-                  if (port.vendorId == 0x2341) {
+                  if (port.vendorId == 0x2341 || port.vendorId == null) {
                     final String tileTitle =
                         address != null ? '$address' : 'N/A';
                     return ListTile(

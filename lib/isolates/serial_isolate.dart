@@ -53,8 +53,9 @@ Future<void> serialIsolate(SendPort p) async {
                 currentAddress);
 
             if (currentPort.isOpen) {
-              currentPort.write(convertStringToUint8List('a'));
               currentPort.write(convertStringToUint8List('4'));
+              // await Future.delayed(const Duration(milliseconds: 500));
+              currentPort.write(convertStringToUint8List('a'));
 
               reader = SerialPortReader(currentPort);
               Stream<String> upcomingData = reader.stream.map((data) {
