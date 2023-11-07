@@ -1,0 +1,1 @@
+enum SerialState { disconnected, connecting, connected }
