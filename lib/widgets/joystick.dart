@@ -194,6 +194,46 @@ class Joystick extends StatelessWidget {
                   decoration: const BoxDecoration(
                       color: Colors.black, shape: BoxShape.circle),
                 ),
+                Positioned(
+                  bottom: -(dotSize / 10),
+                  left: (dotSize / 2) - (dotSize / 10),
+                  child: Container(
+                    width: dotSize / 5,
+                    height: dotSize / 5,
+                    decoration: const BoxDecoration(
+                        color: Colors.blue, shape: BoxShape.circle),
+                  ),
+                ),
+                Positioned(
+                  bottom: (dotSize / 2) - (dotSize / 10),
+                  left: -(dotSize / 10),
+                  child: Container(
+                    width: dotSize / 5,
+                    height: dotSize / 5,
+                    decoration: const BoxDecoration(
+                        color: Colors.red, shape: BoxShape.circle),
+                  ),
+                ),
+                Positioned(
+                  top: -(dotSize / 10),
+                  left: (dotSize / 2) - (dotSize / 10),
+                  child: Container(
+                    width: dotSize / 5,
+                    height: dotSize / 5,
+                    decoration: const BoxDecoration(
+                        color: Colors.green, shape: BoxShape.circle),
+                  ),
+                ),
+                Positioned(
+                  bottom: (dotSize / 2) - (dotSize / 10),
+                  right: -(dotSize / 10),
+                  child: Container(
+                    width: dotSize / 5,
+                    height: dotSize / 5,
+                    decoration: const BoxDecoration(
+                        color: Colors.yellow, shape: BoxShape.circle),
+                  ),
+                )
               ],
             )),
       )

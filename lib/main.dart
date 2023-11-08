@@ -5,6 +5,7 @@ import 'package:ahmsville_dial/isolates/serial_isolate_message.dart';
 import 'package:ahmsville_dial/logger.dart';
 import 'package:ahmsville_dial/state/serial_model.dart';
 import 'package:flutter/material.dart';
+import 'package:dotup_flutter_active_window/dotup_flutter_active_window.dart';
 import 'package:provider/provider.dart';
 
 import './screens/home.dart';
@@ -25,6 +26,16 @@ void main() async {
   //   await windowManager.show();
   //   await windowManager.focus();
   // });
+
+  // or with observer
+  // final filterFromDb = ActiveWindowFilter(value: 'dotup_', field: ActiveWindowProperty.title);
+  final windowObserver = ActiveWindowObserver()
+    // ..addFilter((windowInfo) => windowInfo?.title.contains('main') == false)
+    // ..addFilter(ActiveWindowFilterGenerator().generate(filterFromDb))
+    ..listen((event) {
+      print(event);
+    });
+  windowObserver.start();
 
   SerialModel state = SerialModel();
   createIsolate(state);

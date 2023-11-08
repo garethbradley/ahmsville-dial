@@ -1,4 +1,6 @@
 PODS:
+  - dotup_flutter_active_window (0.0.1):
+    - FlutterMacOS
   - flutter_libserialport (0.0.1):
     - FlutterMacOS
     - libserialport
@@ -10,6 +12,7 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - dotup_flutter_active_window (from `Flutter/ephemeral/.symlinks/plugins/dotup_flutter_active_window/macos`)
   - flutter_libserialport (from `Flutter/ephemeral/.symlinks/plugins/flutter_libserialport/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - screen_retriever (from `Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos`)
@@ -20,6 +23,8 @@ SPEC REPOS:
     - libserialport
 
 EXTERNAL SOURCES:
+  dotup_flutter_active_window:
+    :path: Flutter/ephemeral/.symlinks/plugins/dotup_flutter_active_window/macos
   flutter_libserialport:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_libserialport/macos
   FlutterMacOS:
@@ -30,6 +35,7 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/window_manager/macos
 
 SPEC CHECKSUMS:
+  dotup_flutter_active_window: 43f23004e0f2ab2668d045a123594235c994d5e0
   flutter_libserialport: d1a505fd4b05785f7b50cc7c93b361937ea1c5bd
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   libserialport: 1cb25e66ef3c92a8e59c2ea3820302c3fa2268cd

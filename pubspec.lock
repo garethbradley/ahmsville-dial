@@ -49,6 +49,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  dotup_dart_utils:
+    dependency: transitive
+    description:
+      name: dotup_dart_utils
+      sha256: c5d096c023acbba1fad94b61307c841edb589f2f97520079abc91b52351fec08
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  dotup_flutter_active_window:
+    dependency: "direct main"
+    description:
+      name: dotup_flutter_active_window
+      sha256: "483d2158cfafc53da29ec35650172a0a2f47f022a64bc6dd3eb81f0abf802ccd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
   dylib:
     dependency: transitive
     description:

@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  dotup_flutter_active_window
   flutter_libserialport
   screen_retriever
   window_manager
