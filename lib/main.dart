@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:isolate';
 
 import 'package:ahmsville_dial/isolates/serial_isolate_message.dart';
+import 'package:ahmsville_dial/isolates/websocket_isolate.dart';
 import 'package:ahmsville_dial/logger.dart';
 import 'package:ahmsville_dial/state/serial_model.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import './screens/home.dart';
 import 'isolates/serial_isolate.dart';
+import 'isolates/websocket_isolate_message.dart';
 import 'serial_state.dart';
 
 void main() async {
@@ -27,15 +29,13 @@ void main() async {
   //   await windowManager.focus();
   // });
 
-  // or with observer
-  // final filterFromDb = ActiveWindowFilter(value: 'dotup_', field: ActiveWindowProperty.title);
-  final windowObserver = ActiveWindowObserver()
-    // ..addFilter((windowInfo) => windowInfo?.title.contains('main') == false)
-    // ..addFilter(ActiveWindowFilterGenerator().generate(filterFromDb))
-    ..listen((event) {
-      print(event);
-    });
-  windowObserver.start();
+  // final windowObserver = ActiveWindowObserver()
+  //   // ..addFilter((windowInfo) => windowInfo?.title.contains('main') == false)
+  //   // ..addFilter(ActiveWindowFilterGenerator().generate(filterFromDb))
+  //   ..listen((event) {
+  //     print(event);
+  //   });
+  // windowObserver.start();
 
   SerialModel state = SerialModel();
   createIsolate(state);
@@ -78,16 +78,41 @@ class MyApp extends StatelessWidget {
 }
 
 Future createIsolate(SerialModel state) async {
-  /// Where I listen to the message from Mike's port
-  ReceivePort myReceivePort = ReceivePort();
+  /// Where I listen to the message from the Serial Isolate port
+  ReceivePort serialReceivePort = ReceivePort();
 
-  /// Spawn an isolate, passing my receivePort sendPort
-  Isolate.spawn<SendPort>(serialIsolate, myReceivePort.sendPort);
+  /// Where I listen to the message from the Websocket Isolate port
+  ReceivePort websocketReceivePort = ReceivePort();
 
-  final completer = Completer<SendPort>(); // For awaiting the SendPort.
-  myReceivePort.listen((message) {
+  /// *************** WEBSOCKET ISOLATE ***************
+  /// *************************************************
+  /// Spawn the websocket isolate, passing my receivePort sendPort
+  Isolate.spawn<SendPort>(websocketIsolate, websocketReceivePort.sendPort);
+
+  final websocketCompleter =
+      Completer<SendPort>(); // For awaiting the SendPort.
+  websocketReceivePort.listen((message) {
     if (message is SendPort) {
-      completer.complete(message);
+      websocketCompleter.complete(message);
+    } else {
+      logPrint('🏠 Unknown response: $message');
+    }
+  });
+  final websocketIsolateSendPort =
+      await websocketCompleter.future; // Get the SendPort.
+
+  // Initiate the 2-way connection
+  websocketIsolateSendPort.send(WebsocketIsolateMessage(null));
+
+  /// *************** SERIAL ISOLATE ***************
+  /// **********************************************
+  /// Spawn the serial isolate, passing my receivePort sendPort
+  Isolate.spawn<SendPort>(serialIsolate, serialReceivePort.sendPort);
+
+  final serialCompleter = Completer<SendPort>(); // For awaiting the SendPort.
+  serialReceivePort.listen((message) {
+    if (message is SendPort) {
+      serialCompleter.complete(message);
     } else if (message is SerialIsolateResponse) {
       // logPrint('🏠 Isolate response: ${message.type.name}, ${message.message}');
 
@@ -105,7 +130,7 @@ Future createIsolate(SerialModel state) async {
           // logPrint('🏠 Data: ${message.data.toString()}');
 
           state.updateDialData(message.data!);
-
+          websocketIsolateSendPort.send(WebsocketIsolateMessage(message.data));
           break;
         default:
           break;
@@ -114,7 +139,8 @@ Future createIsolate(SerialModel state) async {
       logPrint('🏠 Unknown response: $message');
     }
   });
-  final serialIsolateSendPort = await completer.future; // Get the SendPort.
+  final serialIsolateSendPort =
+      await serialCompleter.future; // Get the SendPort.
   state.sendPort = serialIsolateSendPort;
 
   // Initiate the 2-way connection

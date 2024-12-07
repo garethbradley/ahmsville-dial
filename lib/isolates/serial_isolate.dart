@@ -43,6 +43,8 @@ Future<void> serialIsolate(SendPort p) async {
           try {
             currentAddress = command.message;
             currentPort = SerialPort(currentAddress);
+            final portconfig = SerialPortConfig();
+            portconfig.baudRate = 115200;
             currentSerialState =
                 setSerialState(p, SerialState.connecting, currentAddress);
             currentSerialState = setSerialState(
@@ -53,6 +55,7 @@ Future<void> serialIsolate(SendPort p) async {
                 currentAddress);
 
             if (currentPort.isOpen) {
+              currentPort.config = portconfig;
               currentPort.write(convertStringToUint8List('4'));
               // await Future.delayed(const Duration(milliseconds: 500));
               currentPort.write(convertStringToUint8List('a'));
@@ -67,7 +70,17 @@ Future<void> serialIsolate(SendPort p) async {
                 while (event.length >= 30) {
                   String message = event.substring(0, 30);
                   model.parseMessage(message);
-                  p.send(SerialIsolateResponse.dataUpdate(data: model));
+
+                  if (model.isDirty) {
+                    p.send(SerialIsolateResponse.dataUpdate(data: model));
+
+                    // We've sent it all out - reset the button press events for next round
+                    model.clearButtonEvents();
+                    // logPrint('🐝 Data is dirty. Sending');
+                  } 
+                  // else {
+                  //   logPrint('🐝 Data not dirty. Ignoring');
+                  // }
 
                   event = event.substring(30);
                 }

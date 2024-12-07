@@ -40,7 +40,7 @@ class _DialUiState extends State<DialUi> {
                   'Planar X', serial.dialData.planarX.value.toStringAsFixed(1)),
               _tile(
                   'Planar Y', serial.dialData.planarY.value.toStringAsFixed(1)),
-              _tile('Knob 1', serial.dialData.knob1.toString()),
+              _tile('Knob 1', serial.dialData.knob1.value.toStringAsFixed(0)),
               _tile('Knob 2', serial.dialData.knob2.value.toStringAsFixed(0)),
               _tile('Buttons', ''),
             ],

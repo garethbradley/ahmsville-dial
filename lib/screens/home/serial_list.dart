@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ahmsville_dial/serial_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
@@ -60,7 +62,7 @@ class _SerialListState extends State<SerialList> {
               Builder(builder: (context) {
                 final port = SerialPort(address);
                 try {
-                  if (port.vendorId == 0x2341 || port.vendorId == null) {
+                  if ((Platform.isMacOS && port.vendorId == 0x2341) || (!Platform.isMacOS && port.vendorId == null)) {
                     final String tileTitle =
                         address != null ? '$address' : 'N/A';
                     return ListTile(

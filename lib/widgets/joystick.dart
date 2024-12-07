@@ -24,6 +24,9 @@ class JoystickData {
 
   double knob2StepsPerRotation = 5000;
   double knob2 = 0;
+
+  // Deadband in percent (0-1)
+  double deadband = 0.15;
 }
 
 class Joystick extends StatelessWidget {
@@ -105,6 +108,16 @@ class Joystick extends StatelessWidget {
         height: size,
         decoration:
             const BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
+      ),
+      Positioned(
+        top: (size / 2) - ((size * data.deadband) / 2),
+        left: (size / 2) - ((size * data.deadband) / 2),
+        child: Container(
+          width: size * data.deadband,
+          height: size * data.deadband,
+          decoration:
+              const BoxDecoration(color: Colors.black26, shape: BoxShape.circle),
+        ),
       ),
       Positioned(
         top: 0,

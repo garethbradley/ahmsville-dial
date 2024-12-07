@@ -63,8 +63,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 data.y = serial.dialData.planarY.value;
                 data.rotationX = serial.dialData.gyroX.value;
                 data.rotationY = serial.dialData.gyroY.value;
-                data.knob1 = (serial.dialData.knob1 * 1.0);
+                data.knob1 = serial.dialData.knob1.value;
                 data.knob2 = serial.dialData.knob2.value;
+                data.deadband = serial.dialData.planarDeadbandPercent;
 
                 return Joystick(data: data);
               })
